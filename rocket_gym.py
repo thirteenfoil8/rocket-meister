@@ -225,6 +225,7 @@ class Rocket:
         self.env = env
         self.visible = True
         self.reset_game_state()
+        self.collision = False
 
     def reset_game_state(self, x=500, y=100, ang=0, vel_x=0, vel_y=0, level=0):
         self.update_state(np.array([x, y, ang, vel_x, vel_y]))
@@ -445,6 +446,7 @@ class Rocket:
             result = line_intersect(*self.movement_vector, *line)
             if result is not None:
                 self.game.set_done()
+                self.collision=True
                 break
 
     def check_collision_echo(self):

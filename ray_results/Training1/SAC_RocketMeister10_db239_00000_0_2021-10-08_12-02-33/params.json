@@ -1,0 +1,10 @@
+{
+  "env": "<class 'rocket_gym.RocketMeister10'>",
+  "env_config": {
+    "export_frames": false,
+    "export_states": false,
+    "max_steps": 1000
+  },
+  "num_cpus_per_worker": 0.5,
+  "num_workers": 30
+}

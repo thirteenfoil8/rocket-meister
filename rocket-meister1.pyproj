@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{80a57646-ed4a-4e5e-abf0-52dfbdb72a6a}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>PPO.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>CondaEnv|CondaEnv|logitech</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="level_creator.py" />
+    <Compile Include="network.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PPO.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PPO_Res.py" />
+    <Compile Include="rocket_gym.py" />
+    <Compile Include="start_human.py" />
+    <Compile Include="start_ray_rollout.py" />
+    <Compile Include="start_ray_training.py" />
+    <Compile Include="start_render_agents.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="imgs\rocket_black.png" />
+    <Content Include="imgs\rocket_no_power.png" />
+    <Content Include="imgs\rocket_power.png" />
+    <Content Include="imgs\rocket_power_front.png" />
+    <Content Include="imgs\space_wp3.jpg" />
+    <Content Include="imgs\space_wp4.jpg" />
+    <Content Include="media\echo.jpg" />
+    <Content Include="media\env_level1.jpg" />
+    <Content Include="media\env_level1_flipped.jpg" />
+    <Content Include="media\env_level2.jpg" />
+    <Content Include="media\formula_observations_all.png" />
+    <Content Include="media\goal_ang.jpg" />
+    <Content Include="media\landing_gif.gif" />
+    <Content Include="media\levelgen_gif.gif" />
+    <Content Include="media\velocity.jpg" />
+    <Content Include="media\vel_ang.jpg" />
+    <Content Include="param\ppo_net_params_1.pkl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="imgs" />
+    <Folder Include="media" />
+    <Folder Include="param\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|logitech" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
