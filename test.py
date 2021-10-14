@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import gym
-from agent import PPO, device
+from PPO import PPO, device
 from torch.utils.tensorboard import SummaryWriter
 import os,shutil
 from datetime import datetime
@@ -35,16 +35,16 @@ def evaluate_policy(env, model, render, steps_per_epoch, max_action):
 def main():
 
 
-    write = True
+    write = False
     render = True
     Loadmodel= True
     env_with_Dead = True  #Env like 'LunarLanderContinuous-v2' is with Dead Signal. Important!
     T_horizon = 2048
-    state_dim = 10
+    state_dim = 28
     action_dim = 2
     max_action = 1
     max_steps = 10000
-    model_index=52000
+    model_index=1200
     env_config = {
     'gui': True,
     'env_name': 'default',
@@ -120,7 +120,7 @@ def main():
         step_ = model_index
     else:
         step_ = 0
-    for episode in range(10):
+    for episode in range(100):
         s = env.reset()
         env.rocket.collision = False
         done = False

@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import gym
-from agent import PPO, device
+from PPO import PPO, device
 from tensorboardX import SummaryWriter
 import os,shutil
 from datetime import datetime
@@ -36,14 +36,14 @@ def main():
 
     write = True
     render = False
-    Loadmodel= True
+    Loadmodel= False
     env_with_Dead = True  #Env like 'LunarLanderContinuous-v2' is with Dead Signal. Important!
-    T_horizon = 6000
-    state_dim = 10
+    T_horizon = 1000
+    state_dim = 28
     action_dim = 2
     max_action = 1
     max_steps = 10000
-    model_index=52000
+    model_index=52400
     env_config = {
     'gui': True,
     'env_name': 'default',

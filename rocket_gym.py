@@ -218,7 +218,7 @@ class Rocket:
     VEL_MAX = 15  # not used
     ROT_VEL = 0.08
     ACCELERATION = 0.5
-    N_ECHO = 7  # must be odd
+    N_ECHO = 25  # must be odd
 
     def __init__(self, game, env):
         self.game = game

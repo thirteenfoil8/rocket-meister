@@ -21,11 +21,14 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="agent.py">
+    <Compile Include="ReplayBuffer.py" />
+    <Compile Include="main_SAC.py" />
+    <Compile Include="SAC.py" />
+    <Compile Include="PPO.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="level_creator.py" />
-    <Compile Include="main.py">
+    <Compile Include="main_PPO.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test.py">
@@ -34,15 +37,8 @@
     <Compile Include="network.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PPO.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PPO_Res.py" />
     <Compile Include="rocket_gym.py" />
     <Compile Include="start_human.py" />
-    <Compile Include="start_ray_rollout.py" />
-    <Compile Include="start_ray_training.py" />
-    <Compile Include="start_render_agents.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="imgs\rocket_black.png" />
