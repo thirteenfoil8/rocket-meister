@@ -36,14 +36,15 @@ def main():
 
     write = True
     render = False
-    Loadmodel= False
+    Loadmodel= True
     env_with_Dead = True  #Env like 'LunarLanderContinuous-v2' is with Dead Signal. Important!
-    T_horizon = 1000
+    T_horizon = 2000
     state_dim = 28
     action_dim = 2
     max_action = 1
     max_steps = 10000
-    model_index=52400
+    model_index=16800
+    path = './model/120'
     env_config = {
     'gui': True,
     'env_name': 'default',
@@ -110,13 +111,14 @@ def main():
     #     kwargs["c_lr"] *= 4  # Beta dist need large lr|maybe
 
     model = PPO(**kwargs)
-    if Loadmodel: model.load(model_index)
+    if Loadmodel: model.load(model_index,path)
 
     steps = 0
     total_steps = 0
     running_score = 0
     if Loadmodel:
         step_ = model_index
+        total_steps=model_index
     else:
         step_ = 0
     for episode in range(step_,Max_episode):
@@ -156,7 +158,7 @@ def main():
         '''save model'''
         running_score = running_score * 0.99 + ep_r * 0.01
         if (episode+1)%save_interval==0:
-            model.save(episode + 1)
+            model.save(episode + 1,path)
 
 
         '''record & log'''

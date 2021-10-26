@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{80a57646-ed4a-4e5e-abf0-52dfbdb72a6a}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>test.py</StartupFile>
+    <StartupFile>ray_train.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -21,6 +21,9 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ray_train.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ReplayBuffer.py" />
     <Compile Include="main_SAC.py" />
     <Compile Include="SAC.py" />

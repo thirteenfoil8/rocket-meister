@@ -52,7 +52,7 @@ class Environment:
 
     def load_level(self):
         line1, line2, goals = np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,4))
-        # default/level1 environment 
+        # default/level1 environment   
         if self.game.env_name in ['default', 'level1']:
             line1 = self.L1_line1_array_source.copy()
             line2 = self.L1_line2_array_source.copy()
@@ -300,7 +300,7 @@ class Rocket:
         matrix[n_sideangles, 3] = int(self.y - 1500 * np.sin(self.ang))
         # angles from 90 deg to 0
         # ignore first angle
-        angles = np.linspace(0, np.pi/2, n_sideangles+1)
+        angles = np.linspace(0, 3*np.pi/4, n_sideangles+1)
         for i in range(n_sideangles):
             # first side
             matrix[i, 2] = int(self.x + 1500 * np.cos(self.ang + angles[i+1]))  # x2
@@ -497,9 +497,8 @@ class RocketMeister10(gym.Env):
         self.observation_space = gym.spaces.Box(
             low=-1.,
             high=1.,
-            shape=(10,),
+            shape=(28,),
             dtype=np.float32)
-
         self.env = Environment(self)
         self.rocket = Rocket(self, self.env)
         self.spectator = None
@@ -618,11 +617,11 @@ class RocketMeister10(gym.Env):
         self.reset_rocket_state()
         # generate observation
         self.rocket.update_observations()
-        distances = self.rocket.echo_collision_distances_interp
+        distances = self.rocket.echo_collision_distances_interp.astype(np.float32)
         velocity = self.rocket.vel_interp
         vel_ang_diff = self.rocket.vel_ang_diff_interp
         goal_ang_diff = self.rocket.goal_ang_diff_interp
-        observation10 = np.concatenate((distances, np.array([velocity, vel_ang_diff, goal_ang_diff])))
+        observation10 = np.concatenate((distances, np.array([velocity, vel_ang_diff, goal_ang_diff],dtype=np.float32)))
         return observation10
 
     def set_spectator_state(self, state, colors=[], frame=None):
@@ -715,12 +714,12 @@ class RocketMeister10(gym.Env):
                     self.set_done()
 
         # ─── GET RETURN VARIABLES ────────────────────────────────────────
-        distances = self.rocket.echo_collision_distances_interp
+        distances = self.rocket.echo_collision_distances_interp.astype(np.float32)
         velocity = self.rocket.vel_interp
         vel_ang_diff = self.rocket.vel_ang_diff_interp
         goal_ang_diff = self.rocket.goal_ang_diff_interp
 
-        observation10 = np.concatenate((distances, np.array([velocity, vel_ang_diff, goal_ang_diff])))
+        observation10 = np.concatenate((distances, np.array([velocity, vel_ang_diff, goal_ang_diff],dtype=np.float32)))
 
         reward = self.rocket.reward_step
         done = self.rocket.done

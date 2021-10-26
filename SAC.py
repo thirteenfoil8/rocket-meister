@@ -16,6 +16,10 @@ def build_net(layer_shape, activation, output_activation):
 		layers += [nn.Linear(layer_shape[j], layer_shape[j+1]), act()]
 	return nn.Sequential(*layers)
 
+def weights_init_(m):
+    if isinstance(m, nn.Linear):
+        torch.nn.init.xavier_uniform_(m.weight, gain=1)
+        torch.nn.init.constant_(m.bias, 0)
 
 class Actor(nn.Module):
 	def __init__(self, state_dim, action_dim, hid_shape, h_acti=nn.ReLU, o_acti=nn.ReLU):
@@ -28,6 +32,7 @@ class Actor(nn.Module):
 
 		self.LOG_STD_MAX = 2
 		self.LOG_STD_MIN = -20
+		self.apply(weights_init_)
 
 
 	def forward(self, state, deterministic=False, with_logprob=True):
@@ -45,7 +50,7 @@ class Actor(nn.Module):
 
 		if with_logprob:
 			# get probability density of logp_pi_a from probability density of u, which is given by the original paper.
-			# logp_pi_a = (dist.log_prob(u) - torch.log(1 - a.pow(2) + 1e-6)).sum(dim=1, keepdim=True)
+			#logp_pi_a = (dist.log_prob(u) - torch.log(1 - a.pow(2) + 1e-6)).sum(dim=1, keepdim=True)
 
 			# Derive from the above equation. No a, thus no tanh(h), thus less gradient vanish and more stable.
 			logp_pi_a = dist.log_prob(u).sum(axis=1, keepdim=True) - (2 * (np.log(2) - u - F.softplus(-2 * u))).sum(axis=1, keepdim=True)
@@ -63,6 +68,7 @@ class Q_Critic(nn.Module):
 
 		self.Q_1 = build_net(layers, nn.ReLU, nn.Identity)
 		self.Q_2 = build_net(layers, nn.ReLU, nn.Identity)
+		self.apply(weights_init_)
 
 
 	def forward(self, state, action):
@@ -82,7 +88,8 @@ class SAC_Agent(object):
 		c_lr=1e-3,
 		batch_size = 64,
 		alpha = 0.2,
-		adaptive_alpha = True
+		adaptive_alpha = True,
+		tau = 0.005
 	):
 
 		self.actor = Actor(state_dim, action_dim, hid_shape).to(device)
@@ -97,16 +104,16 @@ class SAC_Agent(object):
 
 		self.action_dim = action_dim
 		self.gamma = gamma
-		self.tau = 0.005
+		self.tau = tau
 		self.batch_size = batch_size
 
 		self.alpha = alpha
 		self.adaptive_alpha = adaptive_alpha
 		if adaptive_alpha:
 			# Target Entropy = −dim(A) (e.g. , -6 for HalfCheetah-v2) as given in the paper
-			self.target_entropy = torch.tensor(-action_dim, dtype=float, requires_grad=True, device=device)
+			self.target_entropy = -torch.prod(torch.Tensor(action_dim).to(device)).item()
 			# We learn log_alpha instead of alpha to ensure exp(log_alpha)=alpha>0
-			self.log_alpha = torch.tensor(np.log(alpha), dtype=float, requires_grad=True, device=device)
+			self.log_alpha = torch.zeros(1, requires_grad=True, device=device)
 			self.alpha_optim = torch.optim.Adam([self.log_alpha], lr=c_lr)
 
 
@@ -171,11 +178,11 @@ class SAC_Agent(object):
 
 
 
-	def save(self,episode):
-		torch.save(self.actor.state_dict(), "./model/sac_actor{}.pth".format(episode))
-		torch.save(self.q_critic.state_dict(), "./model/sac_q_critic{}.pth".format(episode))
+	def save(self,episode,path ='./model'):
+		torch.save(self.actor.state_dict(), "{}/sac_actor{}.pth".format(path,episode))
+		torch.save(self.q_critic.state_dict(), "{}/sac_q_critic{}.pth".format(path,episode))
 
 
-	def load(self,episode):
-		self.actor.load_state_dict(torch.load("./model/sac_actor{}.pth".format(episode)))
-		self.q_critic.load_state_dict(torch.load("./model/sac_q_critic{}.pth".format(episode)))
+	def load(self,episode,path ='./model'):
+		self.actor.load_state_dict(torch.load("{}/sac_actor{}.pth".format(path,episode)))
+		self.q_critic.load_state_dict(torch.load("{}/sac_q_critic{}.pth".format(path,episode)))

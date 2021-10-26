@@ -44,15 +44,16 @@ def main():
     action_dim = 2
     max_action = 1
     max_steps = 10000
-    model_index=1200
+    model_index=20200
+    path = './model/3pi4'
     env_config = {
     'gui': True,
     'env_name': 'default',
     # 'env_name': 'empty',
-    # 'env_name': 'level1',
-    # 'env_name': 'level2',
-    # 'env_name': 'random',
-    # 'camera_mode': 'centered',
+    #'env_name': 'level1',
+    #'env_name': 'level2',
+    #'env_name': 'random',
+    #'camera_mode': 'centered',
     # 'env_flipped': False,
     # 'env_flipmode': False,
     # 'export_frames': True,
@@ -111,7 +112,7 @@ def main():
     #     kwargs["c_lr"] *= 4  # Beta dist need large lr|maybe
 
     model = PPO(**kwargs)
-    if Loadmodel: model.load(model_index)
+    if Loadmodel: model.load(model_index,path)
 
     steps = 0
     total_steps = 0

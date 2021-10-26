@@ -57,15 +57,15 @@ def main():
     EnvName = 'Rocket_Meister'
     env_with_Dead = True
     model_index=16000
-    max_steps= 10000
+    max_steps= 1000
     env_config = {
     'gui': True,
-    # 'env_name': 'default',
+    'env_name': 'default',
     # 'env_name': 'empty',
     # 'env_name': 'level1',
     # 'env_name': 'level2',
-    'env_name': 'random',
-    'camera_mode': 'centered',
+    #'env_name': 'random',
+    #'camera_mode': 'centered',
     # 'env_flipped': False,
     # 'env_flipmode': False,
     # 'export_frames': True,
@@ -85,10 +85,10 @@ def main():
     }
     env = RocketMeister10(env_config)
     eval_env = RocketMeister10(env_config)
-    state_dim = 10
+    state_dim = 28
     action_dim = 2
     max_action = 1
-    steps_per_epoch = 10
+    steps_per_epoch = 100
     print('Env:','Rocket_Meister','  state_dim:',state_dim,'  action_dim:',action_dim,
           '  max_a:',max_action,'  min_a:',-max_action, 'max_episode_steps', steps_per_epoch)
 
@@ -118,11 +118,12 @@ def main():
         "action_dim": action_dim,
         "gamma": 0.99,
         "hid_shape": (256,256),
-        "a_lr": 3e-4,
-        "c_lr": 3e-4,
+        "a_lr": 1e-4,
+        "c_lr": 1e-4,
         "batch_size":256,
-        "alpha":0.12,
-        "adaptive_alpha":True
+        "alpha":1,
+        "adaptive_alpha":True,
+        "tau":0.005 # put 0.005 if easy to train, else 1
     }
 
 
@@ -170,7 +171,10 @@ def main():
             '''save model'''
             if (t + 1) % save_interval == 0:
                 model.save(t + 1)
-                replay_buffer.save()
+                try:
+                    replay_buffer.save()
+                except:
+                    continue
 
             '''record & log'''
             if (t + 1) % eval_interval == 0:
